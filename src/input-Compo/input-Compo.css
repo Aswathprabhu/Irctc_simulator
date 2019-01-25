@@ -1,0 +1,19 @@
+.input-field {
+    height: 32px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    color: #555;
+    padding: 8px 8px;
+    width: 210px;
+}
+
+.date-input-field {
+    height: 20px;
+    width: 192px;
+}
+
+.input-shadow:focus {
+    border-color: #66afe9;
+    outline:0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'react-power-select/dist/react-power-select.css'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import PNR from "./Pnr-Compo/Pnr-Compo";
+import SeatFare from "./SeatFare-Compo/SeatFare-Compo";
 
 class App extends Component {
+  callRailwayAPI = (url) => {
+    return fetch(url).then(res => res.json()).then(res => res).catch(err => console.log(err));
+  }
+  pnrValidator = () => {
+    let pnrNumber = document.getElementById('pnrNumber').value;
+    // fetch(`https://api.railwayapi.com/v2/pnr-status/pnr/${pnrNumber}/apikey/mk8unxtdpr/`)
+    //     .then(res => res.json())
+    //     .then(res => console.log(res))
+    //     .catch(err => console.log(err));
+  }
+ seatFareChecker = async (userObjo) => {
+   console.log(userObjo);
+   var response = await this.callRailwayAPI(`https://api.railwayapi.com/v2/fare/train/${userObjo['trainNo']}/source/${userObjo['sourceCode']}/dest/${userObjo['destCode']}/age/${userObjo['age']}/pref/${userObjo['pref']}/quota/${userObjo['quotaCode']}/date/${userObjo['date']}/apikey/mk8unxtdpr/`)
+    console.log(response);
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {/* <PNR pnrValidator={this.pnrValidator} /> */}
+        <SeatFare seatFareAvailability={this.seatFareChecker} />
       </div>
     );
   }
