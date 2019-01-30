@@ -4,7 +4,7 @@ import Button from '../button-Compo/button-Compo';
 
 const PNR = (props) => {
     return (
-        <div>
+        <div className="tc">
             <Input 
                 inputClass="inputField inputShadow"
                 labelClass="ma2 dark-blue" 

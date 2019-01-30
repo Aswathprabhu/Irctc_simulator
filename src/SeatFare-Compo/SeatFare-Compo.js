@@ -28,13 +28,13 @@ class SeatFare extends Component {
             'pref': {
                 'label': "Enter Preference",
                 'name': 'pref',
-                'options': ['GN', 'LD', 'HO','DQ','tq'],
+                'options': ['1A', '2A', '3A', 'SL', 'FC', 'CC', '2S'],
                 'type': 'select'               
             },
             'quotaCode': {
                 'label': "Enter Quota",
                 'name': 'quotaCode',
-                'options': ['1A', '2A', '3A', 'SL', 'FC', 'CC', '2S'],
+                'options': ['GN', 'LD', 'HO', 'DQ', 'tq'],
                 'type': 'select'                
             },
             'age': {
@@ -57,8 +57,6 @@ class SeatFare extends Component {
     }
 
     handleChange = ({ target }) => {
-        console.log(target.value);
-        console.log(target.value);
         let dummySeatObjo = {}
         Object.assign(dummySeatObjo,this.state.userObjo);
         dummySeatObjo[target.name] = target.value;
@@ -71,7 +69,7 @@ class SeatFare extends Component {
         let renderContent = [];
         let inputClass;
         Object.entries(this.seatFareObjo).forEach(([key, value]) => {
-            if(value !== undefined) {
+            if ((value !== undefined) && !(this.props.usage === "SeatAvailability" && key === 'age')) {
                 (key === 'date') 
                     ? inputClass = "input-field date-input-field input-shadow w-50 dib"
                     : inputClass = "input-field input-shadow w-50 dib";
@@ -82,6 +80,7 @@ class SeatFare extends Component {
                             label={value['label']}
                             options={value['options']}
                             onchange={this.handleChange}
+                            name={value['name']}
                         />
                     )
                     : renderContent.push(
