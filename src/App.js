@@ -3,7 +3,8 @@ import './App.css';
 import PNR from "./Pnr-Compo/Pnr-Compo";
 import SeatFare from "./SeatFare-Compo/SeatFare-Compo";
 import Nav from "./Nav-Compo/Nav-Compo";
-import Header from "./Header-Compo/Header-Compo"
+import Header from "./Header-Compo/Header-Compo";
+import anime from 'animejs/anime.js';
 class App extends Component {
 
   canShowComponent = ({target}) => {
@@ -81,6 +82,16 @@ class App extends Component {
     ]
   }
 
+  componentDidUpdate() {
+    anime({
+      targets: '.anime',
+      translateY: 500,
+      duration: 500,
+      direction: 'reverse',
+      easing: 'easeInOutSine',
+    });
+  }
+
   render() {
     let renderContent = this.state.renderContent.reduce((contentsArray, Component) => {
       if(Component['canShow']) {
@@ -96,7 +107,7 @@ class App extends Component {
           class="dark-blue lobster-font"
           content="The IRCTC Simulator"
         />
-        <div className="container"> 
+        <div className="container anime"> 
           {renderContent}
         </div>
       </div>
