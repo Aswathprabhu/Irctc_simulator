@@ -1,3 +1,9 @@
 .nav-compo {
   background-color: #154698;
 }
+
+.button-shadow:focus {
+  background-color: black;
+  color: white;
+  outline:0;
+}

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Input from '../input-Compo/input-Compo';
 import Button from '../button-Compo/button-Compo';
 import Select from '../Select-Compo/Select-Compo';
+import moment from 'moment';
+import './SeatFare-Compo.css';
 
 class SeatFare extends Component {
         seatFareObjo= {
@@ -59,7 +61,13 @@ class SeatFare extends Component {
     handleChange = ({ target }) => {
         let dummySeatObjo = {}
         Object.assign(dummySeatObjo,this.state.userObjo);
-        dummySeatObjo[target.name] = target.value;
+        console.log(target.value);
+        if(target.type === 'date') {
+            let date = moment(target.value,'YYYY-MM-DD').format('DD-MM-YYYY');
+            dummySeatObjo[target.name] = date;
+        } else {
+            dummySeatObjo[target.name] = target.value;
+        }
         this.setState({
             userObjo: dummySeatObjo
         });
@@ -76,7 +84,7 @@ class SeatFare extends Component {
                 (value['type'] === 'select')
                     ? renderContent.push(
                         <Select 
-                            labelClass="ma2 dark-blue w-50 tr dib"
+                            labelClass="ma2 dark-blue tr dib label-width"
                             label={value['label']}
                             options={value['options']}
                             onchange={this.handleChange}
@@ -86,7 +94,7 @@ class SeatFare extends Component {
                     : renderContent.push(
                         <Input
                             inputClass= {inputClass}
-                            labelClass="ma2 dark-blue w-50 tr dib"
+                            labelClass="ma2 dark-blue tr dib label-width"
                             label={value['label']}
                             type={value['type']}
                             onchange={this.handleChange}
@@ -96,15 +104,14 @@ class SeatFare extends Component {
             }
         })
         return(
-            <div className="w-100">
+            <div className="dib">
                 {renderContent}
                 <Button
-                    onclick={() => this.props.seatFareAvailability(this.state.userObjo)}
+                    onclick={() => this.props.seatFareAvailability(this.state.userObjo,this.props.usage)}
                     align="tc pa2"
                     class="f5 link ph3 pv2 mb2 dib white bg-dark-blue br2"
                     content="Check Availability"
                 />
-                
             </div>
         );
     }
