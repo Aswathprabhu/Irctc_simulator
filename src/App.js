@@ -5,6 +5,8 @@ import SeatFare from "./SeatFare-Compo/SeatFare-Compo";
 import Nav from "./Nav-Compo/Nav-Compo";
 import Header from "./Header-Compo/Header-Compo";
 import anime from 'animejs/anime.js';
+import VerticallyCenteredModal from './Modal-Compo/Modal-Compo';
+
 class App extends Component {
 
   canShowComponent = ({target}) => {
@@ -21,27 +23,47 @@ class App extends Component {
       renderContent: dummyRenderObjo
     });
   }
+
+  modalClose = () => this.setState({ showModal: false });
+
   callRailwayAPI = (url) => {
     return fetch(url).then(res => res.json()).then(res => res).catch(err => console.log(err));
   }
-  pnrValidator = () => {
-    let pnrNumber = document.getElementById('pnrNumber').value;
-    
-    // fetch(`https://api.railwayapi.com/v2/pnr-status/pnr/${pnrNumber}/apikey/mk8unxtdpr/`)
-    //     .then(res => res.json())
-    //     .then(res => console.log(res))
-    //     .catch(err => console.log(err));
+
+  pnrValidator = async () => {
+    let url = `https://api.railwayapi.com/v2/pnr-status/pnr/4707981579/apikey/mk8unxtdpr/`;
+    var response = await this.callRailwayAPI(url);  
+    console.log(response);
   }
+
  seatFareChecker = async (userObjo, usage) => {
-   let url;
+   let url, modalObjo;
    if (usage === 'FareChecker') {
+     modalObjo = {
+       modalHeader: 'Fare Checker',
+       modalContentHeader: "For Preferred Quota:",
+     }
      url = `https://api.railwayapi.com/v2/fare/train/${userObjo['trainNo']}/source/${userObjo['sourceCode']}/dest/${userObjo['destCode']}/age/${userObjo['age']}/pref/${userObjo['pref']}/quota/${userObjo['quotaCode']}/date/${userObjo['date']}/apikey/mk8unxtdpr/`;
    } else {
+     modalObjo = {
+       modalHeader: 'Seat Availability',
+       modalContentHeader: "Available Seats:",
+     }
      url = `https://api.railwayapi.com/v2/check-seat/train/${userObjo['trainNo']}/source/${userObjo['sourceCode']}/dest/${userObjo['destCode']}/date/${userObjo['date']}/pref/${userObjo['pref']}/quota/${userObjo['quotaCode']}/apikey/mk8unxtdpr/`;
      console.log(url);
    }
-   var response = await this.callRailwayAPI(url)
+   var response = await this.callRailwayAPI(url);
     console.log(response);
+    this.setState({
+      showModal: true,
+      showModalContent: <VerticallyCenteredModal
+                          modalHeader={modalObjo.modalHeader}
+                          modalContentHeader={modalObjo.modalContentHeader}
+                          modalContent={response.fare || response.availability[0].status}
+                          show='true'
+                          onHide={this.modalClose}
+                        />
+    });
   }
 
   buttonsObjo = [
@@ -79,7 +101,15 @@ class App extends Component {
         canShow: false,
         content: <SeatFare usage="FareChecker" seatFareAvailability={this.seatFareChecker} />
       }
-    ]
+    ],
+    showModal: false,
+    showModalContent: <VerticallyCenteredModal 
+                        modalHeader =''
+                        modalContentHeader=''
+                        modalContent = ''
+                        show ='true' 
+                        onHide = {this.modalClose} 
+                      />,
   }
 
   animate = (props) => {
@@ -122,23 +152,30 @@ class App extends Component {
   }
 
   render() {
+    let showModal;
     let renderContent = this.state.renderContent.reduce((contentsArray, Component) => {
       if(Component['canShow']) {
         contentsArray.push(Component['content'])
       }
       return contentsArray;
     },[]);
+      
+    (this.state.showModal) 
+      ? (showModal = this.state.showModalContent)
+      : (showModal = null);
+  
     return (
       <div className="App">
         <Nav onclick={this.canShowComponent} buttons={this.buttonsObjo}/>
         <Header
           align="tc"
-          class="dark-blue lobster-font"
+          class="f2 ma4 dark-blue lobster-font"
           content="The IRCTC Simulator"
         />
         <div className="container"> 
           {renderContent}
         </div>
+        {showModal}
       </div>
     );
   }

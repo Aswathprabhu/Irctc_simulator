@@ -4,12 +4,7 @@
     border: 1px solid #ccc;
     color: #555;
     padding: 8px 8px;
-    width: 210px;
-}
-
-.date-input-field {
-    height: 20px;
-    width: 192px;
+    width: 210px !important;
 }
 
 .input-shadow:focus {
@@ -21,3 +16,4 @@
 .label-width {
   width: 45%;
 }
+
