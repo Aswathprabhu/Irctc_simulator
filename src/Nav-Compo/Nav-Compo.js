@@ -6,7 +6,7 @@ const Nav = (props) => {
   let renderContent = props.buttons.map(button => {
     return(
         <Button
-          align="pa2 dib"
+          align='pa2 dib'
           name={button.name}
           class={button.class}
           content={button.content}

@@ -82,14 +82,43 @@ class App extends Component {
     ]
   }
 
-  componentDidUpdate() {
+  animate = (props) => {
     anime({
-      targets: '.anime',
-      translateY: 500,
-      duration: 500,
+      targets: props.targets,
+      translateY: props.translateY,
+      translateX: props.translateX,
+      duration: props.duration,
+      opacity: [1, 0],
       direction: 'reverse',
       easing: 'easeInOutSine',
     });
+  }
+
+  componentDidUpdate() {
+    this.animate(
+      {
+        targets: '.container',
+        translateX: 0,
+        translateY: 300,
+        duration: 500
+      }
+    );
+    this.animate(
+      {
+        targets: '.input-field',
+        translateX: 50,
+        translateY: 0,
+        duration: 700
+      }
+    );
+    this.animate(
+      {
+        targets: '.label-anime',
+        translateX: -50,
+        translateY: 0,
+        duration: 700
+      }
+    );
   }
 
   render() {
@@ -107,7 +136,7 @@ class App extends Component {
           class="dark-blue lobster-font"
           content="The IRCTC Simulator"
         />
-        <div className="container anime"> 
+        <div className="container"> 
           {renderContent}
         </div>
       </div>

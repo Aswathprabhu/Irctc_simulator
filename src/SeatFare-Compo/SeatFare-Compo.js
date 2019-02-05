@@ -83,8 +83,8 @@ class SeatFare extends Component {
                     : inputClass = "input-field input-shadow w-50 dib";
                 (value['type'] === 'select')
                     ? renderContent.push(
-                        <Select 
-                            labelClass="ma2 dark-blue tr dib label-width"
+                        <Select
+                            labelClass="ma2 dark-blue tr dib label-width label-anime"
                             label={value['label']}
                             options={value['options']}
                             onchange={this.handleChange}
@@ -94,7 +94,7 @@ class SeatFare extends Component {
                     : renderContent.push(
                         <Input
                             inputClass= {inputClass}
-                            labelClass="ma2 dark-blue tr dib label-width"
+                            labelClass="ma2 dark-blue tr dib label-width label-anime"
                             label={value['label']}
                             type={value['type']}
                             onchange={this.handleChange}
