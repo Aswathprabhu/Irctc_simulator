@@ -53,15 +53,24 @@ class SeatFare extends Component {
             destCode:null,
             date:null,
             pref:null,
-            quoteCode:null,
+            quotaCode:null,
             age:null
-        }
+        },
+        isLoading: false
+    }
+
+    handlePowerChange = (option, name) => {
+        let dummySeatObjo = {}
+        Object.assign(dummySeatObjo, this.state.userObjo);
+        dummySeatObjo[name] = option;
+        this.setState({
+            userObjo: dummySeatObjo
+        });
     }
 
     handleChange = ({ target }) => {
         let dummySeatObjo = {}
         Object.assign(dummySeatObjo,this.state.userObjo);
-        console.log(target.value);
         if(target.type === 'date') {
             let date = moment(target.value,'YYYY-MM-DD').format('DD-MM-YYYY');
             dummySeatObjo[target.name] = date;
@@ -70,6 +79,13 @@ class SeatFare extends Component {
         }
         this.setState({
             userObjo: dummySeatObjo
+        });
+    }
+
+    toggleLoading = () => {
+        let isLoading = !this.state.isLoading;
+        this.setState({
+            isLoading
         });
     }
 
@@ -88,6 +104,7 @@ class SeatFare extends Component {
                             label={value['label']}
                             options={value['options']}
                             onchange={this.handleChange}
+                            onPowerChange={this.handlePowerChange}
                             name={value['name']}
                         />
                     )
@@ -107,10 +124,11 @@ class SeatFare extends Component {
             <div className="dib">
                 {renderContent}
                 <Button
-                    onclick={() => this.props.seatFareAvailability(this.state.userObjo,this.props.usage)}
+                    onclick={() => this.props.seatFareAvailability(this.state.userObjo, this.props.usage, this.toggleLoading)}
                     align="tc pa2"
-                    class="f5 link ph3 pv2 mb2 dib white bg-dark-blue br2"
+                    class="f5 link ph3 pv2 mb2 mt2 dib white bg-dark-blue br2"
                     content="Check Availability"
+                    isLoading={this.state.isLoading}
                 />
             </div>
         );

@@ -36,34 +36,34 @@ class App extends Component {
     console.log(response);
   }
 
- seatFareChecker = async (userObjo, usage) => {
-   let url, modalObjo;
-   if (usage === 'FareChecker') {
-     modalObjo = {
-       modalHeader: 'Fare Checker',
-       modalContentHeader: "For Preferred Quota:",
-     }
+  seatFareChecker = async (userObjo, usage, toggleLoading) => {
+    toggleLoading();
+    let url, modalObjo;
+    if (usage === 'FareChecker') {
+      modalObjo = {
+        modalHeader: 'Fare Checker',
+        modalContentHeader: "For Preferred Quota:",
+      }
      url = `https://api.railwayapi.com/v2/fare/train/${userObjo['trainNo']}/source/${userObjo['sourceCode']}/dest/${userObjo['destCode']}/age/${userObjo['age']}/pref/${userObjo['pref']}/quota/${userObjo['quotaCode']}/date/${userObjo['date']}/apikey/mk8unxtdpr/`;
-   } else {
-     modalObjo = {
-       modalHeader: 'Seat Availability',
-       modalContentHeader: "Available Seats:",
-     }
-     url = `https://api.railwayapi.com/v2/check-seat/train/${userObjo['trainNo']}/source/${userObjo['sourceCode']}/dest/${userObjo['destCode']}/date/${userObjo['date']}/pref/${userObjo['pref']}/quota/${userObjo['quotaCode']}/apikey/mk8unxtdpr/`;
-     console.log(url);
-   }
-   var response = await this.callRailwayAPI(url);
-    console.log(response);
+    } else {
+        modalObjo = {
+        modalHeader: 'Seat Availability',
+        modalContentHeader: "Available Seats:",
+      }
+      url = `https://api.railwayapi.com/v2/check-seat/train/${userObjo['trainNo']}/source/${userObjo['sourceCode']}/dest/${userObjo['destCode']}/date/${userObjo['date']}/pref/${userObjo['pref']}/quota/${userObjo['quotaCode']}/apikey/mk8unxtdpr/`;
+    }
+    var response = await this.callRailwayAPI(url);
     this.setState({
-      showModal: true,
-      showModalContent: <VerticallyCenteredModal
-                          modalHeader={modalObjo.modalHeader}
-                          modalContentHeader={modalObjo.modalContentHeader}
-                          modalContent={response.fare || response.availability[0].status}
-                          show='true'
-                          onHide={this.modalClose}
-                        />
+        showModal: true,
+        showModalContent: <VerticallyCenteredModal
+                            modalHeader={modalObjo.modalHeader}
+                            modalContentHeader={modalObjo.modalContentHeader}
+                            modalContent={response.fare || response.availability[0].status}
+                            show='true'
+                            onHide={this.modalClose}
+                          />
     });
+    toggleLoading();
   }
 
   buttonsObjo = [
@@ -88,18 +88,15 @@ class App extends Component {
     renderContent: [
       {
         name: 'pnrStatus',
-        canShow: false,
-        content: <PNR pnrValidator={this.pnrValidator} />
+        canShow: false 
       },
       {
         name: 'seatAvailability',
-        canShow: false,
-        content: <SeatFare usage="SeatAvailability" seatFareAvailability={this.seatFareChecker} />
+        canShow: false
       },
       {
         name: 'seatFare',
-        canShow: false,
-        content: <SeatFare usage="FareChecker" seatFareAvailability={this.seatFareChecker} />
+        canShow: false
       }
     ],
     showModal: false,
@@ -110,6 +107,13 @@ class App extends Component {
                         show ='true' 
                         onHide = {this.modalClose} 
                       />,
+    animateComponents: true         
+  }
+
+  contentObjo = {
+    pnrStatus: <PNR isLoading={this.state.isLoading} pnrValidator={this.pnrValidator} />,
+    seatAvailability: <SeatFare isLoading={this.state.isLoading} usage="SeatAvailability" seatFareAvailability={this.seatFareChecker} />,
+    seatFare: <SeatFare isLoading={this.state.isLoading} usage="FareChecker" seatFareAvailability={this.seatFareChecker} />
   }
 
   animate = (props) => {
@@ -125,37 +129,42 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    this.animate(
-      {
-        targets: '.container',
-        translateX: 0,
-        translateY: 300,
-        duration: 500
-      }
-    );
-    this.animate(
-      {
-        targets: '.input-field',
-        translateX: 50,
-        translateY: 0,
-        duration: 700
-      }
-    );
-    this.animate(
-      {
-        targets: '.label-anime',
-        translateX: -50,
-        translateY: 0,
-        duration: 700
-      }
-    );
+    if (this.state.animateComponents) {
+      this.animate(
+        {
+          targets: '.container',
+          translateX: 0,
+          translateY: 300,
+          duration: 500
+        }
+      );
+      this.animate(
+        {
+          targets: '.input-field',
+          translateX: 50,
+          translateY: 0,
+          duration: 700
+        }
+      );
+      this.animate(
+        {
+          targets: '.label-anime',
+          translateX: -50,
+          translateY: 0,
+          duration: 700
+        }
+      );
+      this.setState({
+        animateComponents: false
+      });
+    }
   }
 
   render() {
     let showModal;
     let renderContent = this.state.renderContent.reduce((contentsArray, Component) => {
       if(Component['canShow']) {
-        contentsArray.push(Component['content'])
+        contentsArray.push(this.contentObjo[Component['name']])
       }
       return contentsArray;
     },[]);
