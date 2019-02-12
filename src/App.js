@@ -37,7 +37,7 @@ class App extends Component {
   }
 
   seatFareChecker = async (userObjo, usage, toggleLoading) => {
-    toggleLoading();
+    toggleLoading(true);
     let url, modalObjo;
     if (usage === 'FareChecker') {
       modalObjo = {
@@ -63,7 +63,7 @@ class App extends Component {
                             onHide={this.modalClose}
                           />
     });
-    toggleLoading();
+    toggleLoading(false);
   }
 
   buttonsObjo = [
@@ -111,9 +111,22 @@ class App extends Component {
   }
 
   contentObjo = {
-    pnrStatus: <PNR isLoading={this.state.isLoading} pnrValidator={this.pnrValidator} />,
-    seatAvailability: <SeatFare isLoading={this.state.isLoading} usage="SeatAvailability" seatFareAvailability={this.seatFareChecker} />,
-    seatFare: <SeatFare isLoading={this.state.isLoading} usage="FareChecker" seatFareAvailability={this.seatFareChecker} />
+    pnrStatus:  <PNR 
+                  isLoading={this.state.isLoading} 
+                  pnrValidator={this.pnrValidator} 
+                />,
+    seatAvailability: <SeatFare 
+                        isLoading={this.state.isLoading} 
+                        usage="SeatAvailability" 
+                        seatFareAvailability={this.seatFareChecker} 
+                        buttonContent="Check Availability"
+                      />,
+    seatFare: <SeatFare 
+                isLoading={this.state.isLoading} 
+                usage="FareChecker" 
+                seatFareAvailability={this.seatFareChecker} 
+                buttonContent="Check Fare"
+              />
   }
 
   animate = (props) => {

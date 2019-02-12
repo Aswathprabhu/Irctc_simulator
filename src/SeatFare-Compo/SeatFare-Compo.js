@@ -82,8 +82,8 @@ class SeatFare extends Component {
         });
     }
 
-    toggleLoading = () => {
-        let isLoading = !this.state.isLoading;
+    toggleLoading = (bool) => {
+        let isLoading = bool;
         this.setState({
             isLoading
         });
@@ -127,7 +127,7 @@ class SeatFare extends Component {
                     onclick={() => this.props.seatFareAvailability(this.state.userObjo, this.props.usage, this.toggleLoading)}
                     align="tc pa2"
                     class="f5 link ph3 pv2 mb2 mt2 dib white bg-dark-blue br2"
-                    content="Check Availability"
+                    content={this.props.buttonContent}
                     isLoading={this.state.isLoading}
                 />
             </div>
