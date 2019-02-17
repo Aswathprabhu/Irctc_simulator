@@ -21,18 +21,21 @@ export default class Select extends Component {
             paddingTop: '8px'
         }
         let optionArray = [];
-        this.props.options.forEach(option => {
-            return optionArray.push(<option value={option}>{option}</option>);
-        })
+        if(this.props.options) {
+          this.props.options.forEach(option => {
+              return optionArray.push(<option value={option}>{option}</option>);
+          })
+        }
         return (
             <div className="pa2 w-100 fl">
                 <label className={this.props.labelClass}>{this.props.label}</label>
-                <div style={style}>
+                <div className="power-anime" style={style}>
                     <PowerSelect
-                        placeholder="Choose an option"
+                        placeholder={this.props.placeholder}
                         options={this.props.options}
                         selected={this.state.selectedOption}
                         onChange={this.handleChange}
+                        onKeyDown={this.props.onKeyDown}
                     />
                 </div>
             </div>

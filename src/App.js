@@ -118,13 +118,15 @@ class App extends Component {
     seatAvailability: <SeatFare 
                         isLoading={this.state.isLoading} 
                         usage="SeatAvailability" 
-                        seatFareAvailability={this.seatFareChecker} 
+                        seatFareAvailability={this.seatFareChecker}
+                        makeNetworkRequest={this.callRailwayAPI} 
                         buttonContent="Check Availability"
                       />,
     seatFare: <SeatFare 
                 isLoading={this.state.isLoading} 
                 usage="FareChecker" 
                 seatFareAvailability={this.seatFareChecker} 
+                makeNetworkRequest={this.callRailwayAPI}
                 buttonContent="Check Fare"
               />
   }
@@ -153,7 +155,7 @@ class App extends Component {
       );
       this.animate(
         {
-          targets: '.input-field',
+          targets: ['.input-field', '.power-anime'],
           translateX: 50,
           translateY: 0,
           duration: 700
